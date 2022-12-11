@@ -1,20 +1,19 @@
 // contains struct information for each channel. 
-int outArr[6]={41,43,45,47,49,51};
-int currentCh = 1;
-int step = 0; 
+
+const int chArr[6]={1,2,3,4,5,6};
 
 struct {
-  int stepState[8] = {0,0,0,0,0,0,0,0};
+  int stepState[8] = {1,0,0,0,1,0,0,0};
   int out = 41;
 } Channel1;
 
 struct {
-  int stepState[8] = {0,0,0,0,0,0,0,0};
+  int stepState[8] = {0,0,1,0,0,1,0,0};
   int out = 43;
 } Channel2;
 
 struct {
-  int stepState[8] = {0,0,0,0,0,0,0,0};
+  int stepState[8] = {1,1,1,1,1,1,1,1};
   int out = 45;
 } Channel3;
 
