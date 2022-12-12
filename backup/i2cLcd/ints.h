@@ -1,16 +1,8 @@
 // storage of integers and the likes
-#include <U8x8lib.h>
+LiquidCrystal_I2C lcd(0x27, SCL, SDA);
 
-#ifdef U8X8_HAVE_HW_SPI
-#include <SPI.h>
-#endif
-#ifdef U8X8_HAVE_HW_I2C
-#include <Wire.h>
-#endif
-
-U8X8_SSD1306_128X64_NONAME_4W_SW_SPI u8x8(/* clock=*/ 13, /* data=*/ 11, /* cs=*/ 10, /* dc=*/ 9, /* reset=*/ 8);
 const int outArr[6]={41,43,45,47,49,51};
-const int ledArr[8]={2,3,4,5,6,7,14,15};
+const int ledArr[8]={2,3,4,5,6,7,8,9};
 //const int btnArr[8]={23,25,27,29,31,33,35,37};
 int ledStp = 0;
 int currentCh = 0;
@@ -23,8 +15,8 @@ const int step3L = 4;
 const int step4L = 5;
 const int step5L = 6;
 const int step6L = 7;
-const int step7L = 14;
-const int step8L = 15;
+const int step7L = 8;
+const int step8L = 9;
 
 // Buttons for DirectIO
 const int step1B = 23;
@@ -60,7 +52,7 @@ const int chBtn = 53;
 
 // Tempo and duty cycle parameters
 bool running;  // clock is running?
-float BPM = 80.0;     // Beats per minute
+float BPM = 120.0;     // Beats per minute
 float max_BPM = 208.0;
 float min_BPM = 7.5;
 int PPB = 4;         // pulses per beat

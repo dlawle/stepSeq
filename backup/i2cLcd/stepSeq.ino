@@ -4,6 +4,7 @@
 //Please visit his repository for a fantastic Clock module 
 //*********************************NOTES*********************************
 
+#include <LiquidCrystal_I2C.h>
 #include <Wire.h>
 #include <TimerOne.h>
 #include <DirectIO.h>
@@ -13,10 +14,9 @@
 
 void setup() {
   //Serial.begin(9600);
+  lcd.init();
+  lcd.backlight();
 
-  // Set up OLED 
-  oledSetup();
-  
   // Timer interrupt
   running = true;
   Timer1.initialize(100); // interrupt every 1 ms
@@ -49,24 +49,9 @@ void setup() {
   for (byte i = 0; i < 6; i++) {
     pinMode(outArr[i], OUTPUT);
   }
-}
-
-void oledSetup(){
-  u8x8.begin();
-  u8x8.clear();
-  u8x8.setFont(u8x8_font_amstrad_cpc_extended_f);
-  u8x8.setCursor(1,2);
-  u8x8.print("C1: ");
-  u8x8.setCursor(1,3);
-  u8x8.print("C2: ");
-  u8x8.setCursor(1,4);
-  u8x8.print("C3: ");
-  u8x8.setCursor(1,5);
-  u8x8.print("C4: ");
-  u8x8.setCursor(1,6);
-  u8x8.print("C5: ");
-  u8x8.setCursor(1,7);
-  u8x8.print("C6: ");
+  // start on channel one for LCD 
+  currentCh = 1;
+// 
 }
 
 void loop() {
@@ -79,7 +64,6 @@ void loop() {
       start_it();
       started = true;
     }
-  updateOled();
 }
 
 void timerStuff() {
@@ -118,8 +102,6 @@ void step_end() {
     if (ledStp == 8){
       ledStp=0;
     }
-    u8x8.setCursor(0,0);
-    u8x8.print("[-]");
   }  
 }
 
@@ -141,8 +123,6 @@ void step_start() {
       } else if (ledStp == 7) {
         l_8.write(HIGH);
   }
-    u8x8.setCursor(0,0);
-    u8x8.print("[+]");
 }
 
 void start_it() {
@@ -183,51 +163,95 @@ void readButtons() {
     switch (currentCh) {
       case 1:
         currentCh = 2;
-        u8x8.setCursor(0,2);
-        u8x8.print(" ");
-        u8x8.setCursor(0,3);
-        u8x8.print("*");
+        lcd.setCursor(0,0);
+        lcd.print("Channel:");
+        lcd.print(currentCh);
+        lcd.setCursor(11,0);      
+        lcd.print(BPM);
+        lcd.setCursor(0,1);
+        lcd.print("Pattern:");
+        for (byte s = 0; s < 8; s++) {
+          lcd.print(Channel[2][s]);
+        }
         break;
       case 2:
         currentCh = 3;
-        u8x8.setCursor(0,3);
-        u8x8.print(" ");
-        u8x8.setCursor(0,4);
-        u8x8.print("*");
+        lcd.setCursor(0,0);
+        lcd.print("Channel:");
+        lcd.print(currentCh);
+        lcd.setCursor(11,0);
+        lcd.print(BPM);
+        lcd.setCursor(0,1);
+        lcd.print("Pattern:");
+        for (byte s = 0; s < 8; s++) {
+          lcd.print(Channel[3][s]);
+        }
         break;
       case 3:
         currentCh = 4;
-        u8x8.setCursor(0,4);
-        u8x8.print(" ");
-        u8x8.setCursor(0,5);
-        u8x8.print("*");
+        lcd.setCursor(0,0);
+        lcd.print("Channel:");
+        lcd.print(currentCh);
+        lcd.setCursor(11,0);
+        lcd.print(BPM);
+        lcd.setCursor(0,1);
+        lcd.print("Pattern:");
+        for (byte s = 0; s < 8; s++) {
+          lcd.print(Channel[4][s]);
+        }
         break;
       case 4:
         currentCh = 5;
-        u8x8.setCursor(0,5);
-        u8x8.print(" ");
-        u8x8.setCursor(0,6);
-        u8x8.print("*");
+        lcd.setCursor(0,0);
+        lcd.print("Channel:");
+        lcd.print(currentCh);
+        lcd.setCursor(11,0);
+        lcd.print(BPM);
+        lcd.setCursor(0,1);
+        lcd.print("Pattern:");
+        for (byte s = 0; s < 8; s++) {
+          lcd.print(Channel[5][s]);
+        }
         break;
       case 5:
         currentCh = 6;
-        u8x8.setCursor(0,6);
-        u8x8.print(" ");
-        u8x8.setCursor(0,7);
-        u8x8.print("*");
+        lcd.setCursor(0,0);
+        lcd.print("Channel:");
+        lcd.print(currentCh);
+        lcd.setCursor(11,0);
+        lcd.print(BPM);
+        lcd.setCursor(0,1);
+        lcd.print("Pattern:");
+        for (byte s = 0; s < 8; s++) {
+          lcd.print(Channel[6][s]);
+        }
         break;
       case 6:
         currentCh = 1;
-        u8x8.setCursor(0,7);
-        u8x8.print(" ");
-        u8x8.setCursor(0,2);
-        u8x8.print("*");
+        lcd.setCursor(0,0);
+        lcd.print("Channel:");
+        lcd.print(currentCh);
+        lcd.setCursor(11,0);
+        lcd.print(BPM);
+        lcd.setCursor(0,1);
+        lcd.print("Pattern:");
+        for (byte s = 0; s < 8; s++) {
+          lcd.print(Channel[1][s]);
+        }
         break;
       default:
         //something random changed mode to an invalid value? Get it back on track.
         currentCh = 1;
-        u8x8.setCursor(0,2);
-        u8x8.print("*");
+        lcd.setCursor(0,0);
+        lcd.print("Channel:");
+        lcd.print(currentCh);
+        lcd.setCursor(11,0);
+        lcd.print(BPM);
+        lcd.setCursor(0,1);
+        lcd.print("Pattern:");
+        for (byte s = 0; s < 8;  s++) {
+            lcd.print(Channel[1][s]);
+          }
         break;
         }
       }
@@ -238,5 +262,16 @@ void readButtons() {
   lastButtonState = reading;
 }
 
-void updateOled(){
+void trigMap(){
+  for (byte s = 0; s < 8;  s++) {
+    for (byte c = 0; c < 6  ;  c++) {
+    if (digitalRead(btnArr[s]) == HIGH) {
+      digitalWrite(s, HIGH);
+      Channel[c][s] = 1;
+    } else {
+      digitalWrite(s, LOW);
+      Channel[c][s] = 0;
+    }
+    }
+  }
 }
