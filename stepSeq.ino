@@ -3,7 +3,9 @@
 //by Richard Holmes' AOClock (https://github.com/holmesrichards/clock)
 //Please visit his repository for a fantastic Clock module 
 //*********************************NOTES*********************************
-
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <SPI.h>
 #include <Wire.h>
 #include <TimerOne.h>
 #include <DirectIO.h>
@@ -11,12 +13,25 @@
 #include "channels.h" 
 #include "ints.h"
 
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
+// Declaration for SSD1306 display connected using software SPI (default case):
+#define OLED_MOSI  11
+#define OLED_CLK   13
+#define OLED_DC    9
+#define OLED_CS    10
+#define OLED_RESET 8
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT,
+  OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
+  
 void setup() {
   //Serial.begin(9600);
 
-  // Set up OLED 
-  oledSetup();
-  
+  //Set Up Oled
+   display.begin(SSD1306_SWITCHCAPVCC);
+   display.clearDisplay();  
+   setDisplay();
   // Timer interrupt
   running = true;
   Timer1.initialize(100); // interrupt every 1 ms
@@ -52,25 +67,12 @@ void setup() {
 }
 
 void oledSetup(){
-  u8x8.begin();
-  u8x8.clear();
-  u8x8.setFont(u8x8_font_amstrad_cpc_extended_f);
-  u8x8.setCursor(1,2);
-  u8x8.print("C1: ");
-  u8x8.setCursor(1,3);
-  u8x8.print("C2: ");
-  u8x8.setCursor(1,4);
-  u8x8.print("C3: ");
-  u8x8.setCursor(1,5);
-  u8x8.print("C4: ");
-  u8x8.setCursor(1,6);
-  u8x8.print("C5: ");
-  u8x8.setCursor(1,7);
-  u8x8.print("C6: ");
+  display.begin(SSD1306_SWITCHCAPVCC);
+  display.clearDisplay();
+  
 }
 
 void loop() {
-  readButtons();
   static bool started = false;
   if (!started)
     {
@@ -79,7 +81,9 @@ void loop() {
       start_it();
       started = true;
     }
-  updateOled();
+  readButtons();
+  updateSteps();
+  display.display();
 }
 
 void timerStuff() {
@@ -118,8 +122,7 @@ void step_end() {
     if (ledStp == 8){
       ledStp=0;
     }
-    u8x8.setCursor(0,0);
-    u8x8.print("[-]");
+    display.fillRect(120,0,6,6,SSD1306_WHITE);
   }  
 }
 
@@ -141,8 +144,7 @@ void step_start() {
       } else if (ledStp == 7) {
         l_8.write(HIGH);
   }
-    u8x8.setCursor(0,0);
-    u8x8.print("[+]");
+  display.fillRect(121,1,4,4,SSD1306_BLACK);
 }
 
 void start_it() {
@@ -183,51 +185,25 @@ void readButtons() {
     switch (currentCh) {
       case 1:
         currentCh = 2;
-        u8x8.setCursor(0,2);
-        u8x8.print(" ");
-        u8x8.setCursor(0,3);
-        u8x8.print("*");
         break;
       case 2:
         currentCh = 3;
-        u8x8.setCursor(0,3);
-        u8x8.print(" ");
-        u8x8.setCursor(0,4);
-        u8x8.print("*");
         break;
       case 3:
         currentCh = 4;
-        u8x8.setCursor(0,4);
-        u8x8.print(" ");
-        u8x8.setCursor(0,5);
-        u8x8.print("*");
         break;
       case 4:
         currentCh = 5;
-        u8x8.setCursor(0,5);
-        u8x8.print(" ");
-        u8x8.setCursor(0,6);
-        u8x8.print("*");
         break;
       case 5:
         currentCh = 6;
-        u8x8.setCursor(0,6);
-        u8x8.print(" ");
-        u8x8.setCursor(0,7);
-        u8x8.print("*");
         break;
       case 6:
         currentCh = 1;
-        u8x8.setCursor(0,7);
-        u8x8.print(" ");
-        u8x8.setCursor(0,2);
-        u8x8.print("*");
         break;
       default:
         //something random changed mode to an invalid value? Get it back on track.
         currentCh = 1;
-        u8x8.setCursor(0,2);
-        u8x8.print("*");
         break;
         }
       }
@@ -238,5 +214,41 @@ void readButtons() {
   lastButtonState = reading;
 }
 
-void updateOled(){
+void setDisplay(){
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0,0);
+  display.print("BPM ");
+  display.drawFastHLine(0, 8,128,SSD1306_WHITE);
+  display.drawFastVLine(24,0,64,SSD1306_WHITE);
+  display.setCursor(4,10);
+  display.print("CH1 ");
+  display.setCursor(4,19);
+  display.print("CH2 ");
+  display.setCursor(4,28);
+  display.print("CH3 ");
+  display.setCursor(4,37);
+  display.print("CH4 ");
+  display.setCursor(4,46);
+  display.print("CH5 ");
+  display.setCursor(4,55);
+  display.print("CH6 ");
+  display.drawRect(120,0,6,6,SSD1306_WHITE); 
+
+  display.display();
+
+}
+
+void updateSteps(){
+  int xline = 25;
+    for (byte i = 0; i < 6; i++) {
+      display.setCursor(xline,channelYpos[i]);
+      for (byte s = 0; s < 8; s++) {
+        display.print(" ");
+        display.print(Channel[i][s]);
+      }
+    }
+  display.setCursor(30,0);  
+  display.print(BPM);
 }
