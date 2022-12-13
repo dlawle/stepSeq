@@ -182,29 +182,47 @@ void readButtons() {
       //Only change mode if the new button state is LOW (pressed)
       //depending on which mode we are in, we may jump to a different one
       if (buttonState == HIGH) {
-    switch (currentCh) {
-      case 1:
-        currentCh = 2;
-        break;
-      case 2:
-        currentCh = 3;
-        break;
-      case 3:
-        currentCh = 4;
-        break;
-      case 4:
-        currentCh = 5;
-        break;
-      case 5:
-        currentCh = 6;
-        break;
-      case 6:
-        currentCh = 1;
-        break;
-      default:
-        //something random changed mode to an invalid value? Get it back on track.
-        currentCh = 1;
-        break;
+        switch (currentCh) {
+          case 1:
+            currentCh = 2;
+            display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
+            display.setCursor(0,channelYpos[1]);
+            display.print("*");
+            break;
+          case 2:
+            currentCh = 3;
+            display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
+            display.setCursor(0,channelYpos[2]);
+            display.print("*");
+            break;
+          case 3:
+            currentCh = 4;
+            display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
+            display.setCursor(0,channelYpos[3]);
+            display.print("*");
+            break;
+          case 4:
+            currentCh = 5;
+            display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
+            display.setCursor(0,channelYpos[4]);
+            display.print("*");
+            break;
+          case 5:
+            currentCh = 6;
+            display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
+            display.setCursor(0,channelYpos[5]);
+            display.print("*");
+            break;
+          case 6:
+            currentCh = 1;
+            display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
+            display.setCursor(0,channelYpos[0]);
+            display.print("*");
+            break;
+          default:
+            //something random changed mode to an invalid value? Get it back on track.
+            currentCh = 1;
+            break;
         }
       }
     }
@@ -222,17 +240,17 @@ void setDisplay(){
   display.print("BPM ");
   display.drawFastHLine(0, 8,128,SSD1306_WHITE);
   display.drawFastVLine(24,0,64,SSD1306_WHITE);
-  display.setCursor(4,10);
+  display.setCursor(6,10);
   display.print("CH1 ");
-  display.setCursor(4,19);
+  display.setCursor(6,19);
   display.print("CH2 ");
-  display.setCursor(4,28);
+  display.setCursor(6,28);
   display.print("CH3 ");
-  display.setCursor(4,37);
+  display.setCursor(6,37);
   display.print("CH4 ");
-  display.setCursor(4,46);
+  display.setCursor(6,46);
   display.print("CH5 ");
-  display.setCursor(4,55);
+  display.setCursor(6,55);
   display.print("CH6 ");
   display.drawRect(120,0,6,6,SSD1306_WHITE); 
 
