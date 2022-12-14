@@ -26,7 +26,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT,
   OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
   
 void setup() {
-  //Serial.begin(9600);
+  Serial.begin(9600);
 
   //Set Up Oled
    display.begin(SSD1306_SWITCHCAPVCC);
@@ -59,6 +59,7 @@ void setup() {
   pinMode (b_7, INPUT);    
   pinMode (b_8, INPUT);
   pinMode (chBtn, INPUT);
+  pinMode (step_1test, INPUT);
   
   // setup channel outputs
   for (byte i = 0; i < 6; i++) {
@@ -81,8 +82,8 @@ void loop() {
       start_it();
       started = true;
     }
-  readButtons();
-  updateSteps();
+
+  trigMap();
   display.display();
 }
 
@@ -260,6 +261,7 @@ void setDisplay(){
 
 void updateSteps(){
   int xline = 25;
+  display.fillRect(xline,channelYpos[0],SCREEN_WIDTH,SCREEN_HEIGHT,SSD1306_BLACK);
     for (byte i = 0; i < 6; i++) {
       display.setCursor(xline,channelYpos[i]);
       for (byte s = 0; s < 8; s++) {
@@ -269,4 +271,19 @@ void updateSteps(){
     }
   display.setCursor(30,0);  
   display.print(BPM);
+}
+
+void trigMap(){{
+    if (digitalRead(step_1test) == HIGH && Channel[3][1] == 0) { // check both states
+      Serial.println("PRESSED");
+      l_1.write(HIGH);            // how do we work with this and arrays? or do we just get rid of it? Also, end_step turns off all LEDs. maybe check to see which pins are high and skip? 
+      Channel[3][1] = 1;
+    } else if (digitalRead(step_1test) == HIGH && Channel[3][1] == 1) {
+      l_1.write(LOW);
+      Channel[3][1] = 0;
+    }
+    readButtons();
+    updateSteps();
+    display.display();
+  }
 }

@@ -1,7 +1,7 @@
 // storage of integers and the likes
 
 const int outArr[6]={41,43,45,47,49,51};
-const int ledArr[8]={2,3,4,5,6,7,14,15};
+//const int ledArr[8]={2,3,4,5,6,7,14,15};
 //const int btnArr[8]={23,25,27,29,31,33,35,37};
 int ledStp = 0;
 int currentCh = 0;
@@ -47,11 +47,12 @@ volatile Input<step6B> b_6;
 volatile Input<step7B> b_7;
 volatile Input<step8B> b_8;
 const char btnArr[8] = {b_1,b_2,b_3,b_4,b_5,b_6,b_7,b_8};
+const char ledArr[8]={l_1,l_2,l_3,l_4,l_5,l_6,l_7,l_8};
 const int chBtn = 53;
-
+const int step_1test = 23;
 // Tempo and duty cycle parameters
 bool running;  // clock is running?
-float BPM = 120.0;     // Beats per minute
+float BPM = 90.0;     // Beats per minute
 float max_BPM = 208.0;
 float min_BPM = 7.5;
 int PPB = 4;         // pulses per beat
