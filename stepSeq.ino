@@ -89,25 +89,32 @@ void timerStuff() {
 
 void step_end() {
   // Turn off LEDs and increment counters
-  if (running) {
-    l_1.write(LOW);
-    l_2.write(LOW);
-    l_3.write(LOW);
-    l_4.write(LOW);
-    l_5.write(LOW);
-    l_6.write(LOW);
-    l_7.write(LOW);
-    l_8.write(LOW);
+  if (ledStp == 0) {
+        l_1.write(LOW);
+      } else if (ledStp == 1) {
+        l_2.write(LOW);
+      } else if (ledStp == 2) {
+        l_3.write(LOW);
+      } else if (ledStp == 3) {
+        l_4.write(LOW);
+      } else if (ledStp == 4) {
+        l_5.write(LOW);
+      } else if (ledStp == 5) {
+        l_6.write(LOW);
+      } else if (ledStp == 6) {
+        l_7.write(LOW);
+      } else if (ledStp == 7) {
+        l_8.write(LOW);
+  }
     ledStp++;
     if (ledStp == 8){
       ledStp=0;
     }
-    display.fillRect(120,0,6,6,SSD1306_WHITE);
-  }  
+    display.fillRect(120,0,6,6,SSD1306_WHITE);  
 }
 
 void step_start() {
-      if (ledStp == 0) {
+    if (ledStp == 0) {
         l_1.write(HIGH);
       } else if (ledStp == 1) {
         l_2.write(HIGH);
@@ -282,10 +289,12 @@ void updateSteps(){
 
 void trigMap(int c) {
   if(b_1 == HIGH && l_1 == LOW) {
-   l_1 = HIGH;
+   // l_1 = HIGH;
+   digitalWrite(2,HIGH);
    Channel[c][0] = 1; 
   } else if(b_1 == HIGH && l_1 == HIGH) {
-    l_1 = LOW;
+    //l_1 = LOW;
+    digitalWrite(2,HIGH);
     Channel[c][0] = 0; 
   }
   if(b_2 == HIGH && l_2 == LOW) {
