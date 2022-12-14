@@ -39,8 +39,27 @@ void setup() {
 
   // set LED step array to the first step
   ledStp = 0;
- 
-  pinMode(chBtn, INPUT);
+  
+  // DirectIO Mapping
+  pinMode (l_1, OUTPUT);
+  pinMode (l_2, OUTPUT);
+  pinMode (l_3, OUTPUT);
+  pinMode (l_4, OUTPUT);
+  pinMode (l_5, OUTPUT);
+  pinMode (l_6, OUTPUT);
+  pinMode (l_7, OUTPUT);    
+  pinMode (l_8, OUTPUT);
+
+  pinMode (b_1, INPUT);
+  pinMode (b_2, INPUT);
+  pinMode (b_3, INPUT);
+  pinMode (b_4, INPUT);
+  pinMode (b_5, INPUT);
+  pinMode (b_6, INPUT);
+  pinMode (b_7, INPUT);    
+  pinMode (b_8, INPUT);
+  pinMode (chBtn, INPUT);
+  pinMode (step_1test, INPUT);
   
   // setup channel outputs
   for (byte i = 0; i < 6; i++) {
@@ -51,6 +70,7 @@ void setup() {
 void oledSetup(){
   display.begin(SSD1306_SWITCHCAPVCC);
   display.clearDisplay();
+  
 }
 
 void loop() {
@@ -61,8 +81,10 @@ void loop() {
       ontime = period * duty_cycle * 0.01;
       start_it();
       started = true;
-    } 
-    trigMap();     
+    }
+
+  trigMap();
+  display.display();
 }
 
 void timerStuff() {
@@ -83,7 +105,7 @@ void timerStuff() {
     clock_state = true;
     cycle_start_time += period;
   }
- }
+    }
 }
 
 void step_end() {
@@ -249,34 +271,22 @@ void updateSteps(){
     }
   display.setCursor(30,0);  
   display.print(BPM);
-  display.display();
 }
 
-//void trigMap(){
-//  for (byte s = 0; s < 8; s++) {
-//    for (byte i = 0; i < 6; i++) {
-//      if (digitalRead(btnArr[s]) == HIGH) {
-//        Serial.println("PRESSED");
-//        digitalWrite(ledArr[s],HIGH);
-//        Channel[i][s] = 1;
-//      } else if (digitalRead(btnArr[s]) == LOW) {
-//        digitalWrite(ledArr[s],LOW);
-//        Channel[i][s] = 0;
-//      }
-//    }
-//  }
-//  updateSteps();
-//  readButtons();
-//}
-
-void trigMap(int) {
-  if(b_1 == HIGH && l_1 == LOW) {
-   l_1 = HIGH;
-   Channel[0][0] = 1; 
-  } else if(b_1 == HIGH && l_1 == HIGH) {
-    l_1 = LOW;
-    Channel[0][0] = 0; 
+void trigMap(){{
+  for (byte i = 0; i < 6; i++) {
+    for (byte s = 0; s < 8; s++) {
+      if (digitalRead(step_1test) == HIGH && Channel[3][1] == 0) { // check both states
+        Serial.println("PRESSED");
+        l_1.write(HIGH);            // how do we work with this and arrays? or do we just get rid of it? Also, end_step turns off all LEDs. maybe check to see which pins are high and skip? 
+        Channel[3][1] = 1;
+      } else if (digitalRead(step_1test) == HIGH && Channel[3][1] == 1) {
+        l_1.write(LOW);
+        Channel[3][1] = 0;
+      }
+      readButtons();
+      updateSteps();
+      display.display();
+    }
   }
-  updateSteps();
-  readButtons();
 }

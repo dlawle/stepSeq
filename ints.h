@@ -1,55 +1,39 @@
 // storage of integers and the likes
 
 const int outArr[6]={41,43,45,47,49,51};
-//const int ledArr[8]={2,3,4,5,6,7,14,15};
-//const int btnArr[8]={23,25,27,29,31,33,35,37};
+int ledArr[8]={2,3,4,5,6,7,14,15};
+const int btnArr[8]={23,25,27,29,31,33,35,37};
 int ledStp = 0;
 int currentCh = 0;
 int step = 0; 
 
-// LED Pins for DirectIO
-const int step1L = 2;
-const int step2L = 3;
-const int step3L = 4;
-const int step4L = 5;
-const int step5L = 6;
-const int step6L = 7;
-const int step7L = 14;
-const int step8L = 15;
-
-// Buttons for DirectIO
-const int step1B = 23;
-const int step2B = 25;
-const int step3B = 27;
-const int step4B = 29;
-const int step5B = 31;
-const int step6B = 33;
-const int step7B = 35;
-const int step8B = 37;
-
 // setup DirectIO outputs
 //LEDs
-volatile Output<step1L> l_1;
-volatile Output<step2L> l_2;
-volatile Output<step3L> l_3;
-volatile Output<step4L> l_4;
-volatile Output<step5L> l_5;
-volatile Output<step6L> l_6;
-volatile Output<step7L> l_7;
-volatile Output<step8L> l_8;
+Output<2> l_1;
+Output<3> l_2;
+Output<4> l_3;
+Output<5> l_4;
+Output<6> l_5;
+Output<7> l_6;
+Output<14> l_7;
+Output<15> l_8;
+
 //Buttons
-volatile Input<step1B> b_1;
-volatile Input<step2B> b_2;
-volatile Input<step3B> b_3;
-volatile Input<step4B> b_4;
-volatile Input<step5B> b_5;
-volatile Input<step6B> b_6;
-volatile Input<step7B> b_7;
-volatile Input<step8B> b_8;
-const char btnArr[8] = {b_1,b_2,b_3,b_4,b_5,b_6,b_7,b_8};
-const char ledArr[8]={l_1,l_2,l_3,l_4,l_5,l_6,l_7,l_8};
+Input<23> b_1;
+Input<25> b_2;
+Input<27> b_3;
+Input<29> b_4;
+Input<31> b_5;
+Input<33> b_6;
+Input<35> b_7;
+Input<37> b_8;
+
+//char btnArr[8] = {b_1,b_2,b_3,b_4,b_5,b_6,b_7,b_8};
+//char ledArr[8]={l_1,l_2,l_3,l_4,l_5,l_6,l_7,l_8};
 const int chBtn = 53;
-const int step_1test = 23;
+
+//const int step_1test = 23;   // this was done for testing a single button
+
 // Tempo and duty cycle parameters
 bool running;  // clock is running?
 float BPM = 90.0;     // Beats per minute
