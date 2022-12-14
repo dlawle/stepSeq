@@ -31,7 +31,7 @@ void setup() {
   //Set Up Oled
    display.begin(SSD1306_SWITCHCAPVCC);
    display.clearDisplay();  
-   setDisplay();
+  setDisplay();
   // Timer interrupt
   running = true;
   Timer1.initialize(100); // interrupt every 1 ms
@@ -61,8 +61,9 @@ void loop() {
       ontime = period * duty_cycle * 0.01;
       start_it();
       started = true;
-    } 
-    trigMap();     
+    }   
+  readButtons(); 
+  updateSteps();   
 }
 
 void timerStuff() {
@@ -173,34 +174,40 @@ void readButtons() {
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[2]);
             display.print("*");
+            
             break;
           case 3:
             currentCh = 4;
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[3]);
             display.print("*");
+            
             break;
           case 4:
             currentCh = 5;
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[4]);
             display.print("*");
+            
             break;
           case 5:
             currentCh = 6;
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[5]);
             display.print("*");
+            
             break;
           case 6:
             currentCh = 1;
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[0]);
             display.print("*");
+            
             break;
           default:
             //something random changed mode to an invalid value? Get it back on track.
             currentCh = 1;
+            
             break;
         }
       }
@@ -232,7 +239,10 @@ void setDisplay(){
   display.setCursor(6,55);
   display.print("CH6 ");
   display.drawRect(120,0,6,6,SSD1306_WHITE); 
-
+  currentCh = 1;
+  display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
+  display.setCursor(0,channelYpos[0]);
+  display.print("*");
   display.display();
 
 }
@@ -249,6 +259,7 @@ void updateSteps(){
     }
   display.setCursor(30,0);  
   display.print(BPM);
+  trigMap(currentCh -1);
   display.display();
 }
 
@@ -269,14 +280,61 @@ void updateSteps(){
 //  readButtons();
 //}
 
-void trigMap(int) {
+void trigMap(int c) {
   if(b_1 == HIGH && l_1 == LOW) {
    l_1 = HIGH;
-   Channel[0][0] = 1; 
+   Channel[c][0] = 1; 
   } else if(b_1 == HIGH && l_1 == HIGH) {
     l_1 = LOW;
-    Channel[0][0] = 0; 
+    Channel[c][0] = 0; 
   }
-  updateSteps();
-  readButtons();
+  if(b_2 == HIGH && l_2 == LOW) {
+   l_2 = HIGH;
+   Channel[c][1] = 1; 
+  } else if(b_2 == HIGH && l_2 == HIGH) {
+    l_2 = LOW;
+    Channel[c][1] = 0; 
+  }
+  if(b_3 == HIGH && l_3 == LOW) {
+   l_3 = HIGH;
+   Channel[c][2] = 1; 
+  } else if(b_3 == HIGH && l_3 == HIGH) {
+    l_3 = LOW;
+    Channel[c][2] = 0; 
+  }
+  if(b_4 == HIGH && l_4 == LOW) {
+   l_4 = HIGH;
+   Channel[c][3] = 1; 
+  } else if(b_4 == HIGH && l_4 == HIGH) {
+    l_4 = LOW;
+    Channel[c][3] = 0; 
+  }
+  if(b_5 == HIGH && l_5 == LOW) {
+   l_5 = HIGH;
+   Channel[c][4] = 1; 
+  } else if(b_5== HIGH && l_5 == HIGH) {
+    l_5 = LOW;
+    Channel[c][4] = 0; 
+  }
+  if(b_6 == HIGH && l_6 == LOW) {
+   l_6 = HIGH;
+   Channel[c][5] = 1; 
+  } else if(b_6 == HIGH && l_6 == HIGH) {
+    l_6 = LOW;
+    Channel[c][5] = 0; 
+  }
+  if(b_7 == HIGH && l_7 == LOW) {
+   l_1 = HIGH;
+   Channel[c][6] = 1; 
+  } else if(b_7 == HIGH && l_7 == HIGH) {
+    l_7 = LOW;
+    Channel[c][6] = 0; 
+  }
+  if(b_8 == HIGH && l_8 == LOW) {
+   l_8 = HIGH;
+   Channel[c][7] = 1; 
+  } else if(b_8 == HIGH && l_8 == HIGH) {
+    l_8 = LOW;
+    Channel[c][7] = 0; 
+  }
 }
