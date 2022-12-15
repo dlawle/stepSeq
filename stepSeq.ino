@@ -60,10 +60,11 @@ void loop() {
       period = (60000000./BPM/PPB);  // period in usec
       ontime = period * duty_cycle * 0.01;
       start_it();
-      started = true;
+      started = true; 
     }   
+  updateSteps();  
   readButtons(); 
-  updateSteps();   
+
 }
 
 void timerStuff() {
@@ -90,21 +91,53 @@ void timerStuff() {
 void step_end() {
   // Turn off LEDs and increment counters
   if (ledStp == 0) {
-        l_1.write(LOW);
-      } else if (ledStp == 1) {
-        l_2.write(LOW);
+    if (Channel[currentCh][ledStp] == 0) {
+      l_1.write(LOW);
+    } else if(Channel[currentCh][ledStp] == 1) {
+        l_1.write(HIGH);
+        }
+    } else if (ledStp == 1) {
+    if (Channel[currentCh][ledStp] == 0) {
+      l_2.write(LOW);
+    } else if(Channel[currentCh][ledStp] == 1) {
+        l_2.write(HIGH);
+        }
       } else if (ledStp == 2) {
-        l_3.write(LOW);
+    if (Channel[currentCh][ledStp] == 0) {
+      l_3.write(LOW);
+    } else if(Channel[currentCh][ledStp] == 1) {
+        l_3.write(HIGH);
+        }
       } else if (ledStp == 3) {
-        l_4.write(LOW);
+    if (Channel[currentCh][ledStp] == 0) {
+      l_4.write(LOW);
+    } else if(Channel[currentCh][ledStp] == 1) {
+        l_4.write(HIGH);
+        }
       } else if (ledStp == 4) {
-        l_5.write(LOW);
+    if (Channel[currentCh][ledStp] == 0) {
+      l_5.write(LOW);
+    } else if(Channel[currentCh][ledStp] == 1) {
+        l_5.write(HIGH);
+        }
       } else if (ledStp == 5) {
-        l_6.write(LOW);
+    if (Channel[currentCh][ledStp] == 0) {
+      l_6.write(LOW);
+    } else if(Channel[currentCh][ledStp] == 1) {
+        l_6.write(HIGH);
+        }
       } else if (ledStp == 6) {
-        l_7.write(LOW);
+    if (Channel[currentCh][ledStp] == 0) {
+      l_7.write(LOW);
+    } else if(Channel[currentCh][ledStp] == 1) {
+        l_7.write(HIGH);
+        }
       } else if (ledStp == 7) {
-        l_8.write(LOW);
+    if (Channel[currentCh][ledStp] == 0) {
+      l_8.write(LOW);
+    } else if(Channel[currentCh][ledStp] == 1) {
+        l_8.write(HIGH);
+        }
   }
     ledStp++;
     if (ledStp == 8){
@@ -269,23 +302,6 @@ void updateSteps(){
   trigMap(currentCh -1);
   display.display();
 }
-
-//void trigMap(){
-//  for (byte s = 0; s < 8; s++) {
-//    for (byte i = 0; i < 6; i++) {
-//      if (digitalRead(btnArr[s]) == HIGH) {
-//        Serial.println("PRESSED");
-//        digitalWrite(ledArr[s],HIGH);
-//        Channel[i][s] = 1;
-//      } else if (digitalRead(btnArr[s]) == LOW) {
-//        digitalWrite(ledArr[s],LOW);
-//        Channel[i][s] = 0;
-//      }
-//    }
-//  }
-//  updateSteps();
-//  readButtons();
-//}
 
 void trigMap(int c) {
   if(b_1 == HIGH && l_1 == LOW) {
