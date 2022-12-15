@@ -91,51 +91,51 @@ void timerStuff() {
 void step_end() {
   // Turn off LEDs and increment counters
   if (ledStp == 0) {
-    if (Channel[currentCh][ledStp] == 0) {
+    if (Channel[currentCh-1][ledStp] == 0) {
       l_1.write(LOW);
-    } else if(Channel[currentCh][ledStp] == 1) {
+    } else if(Channel[currentCh-1][ledStp] == 1) {
         l_1.write(HIGH);
         }
     } else if (ledStp == 1) {
-    if (Channel[currentCh][ledStp] == 0) {
+    if (Channel[currentCh-1][ledStp] == 0) {
       l_2.write(LOW);
-    } else if(Channel[currentCh][ledStp] == 1) {
+    } else if(Channel[currentCh-1][ledStp] == 1) {
         l_2.write(HIGH);
         }
       } else if (ledStp == 2) {
-    if (Channel[currentCh][ledStp] == 0) {
+    if (Channel[currentCh-1][ledStp] == 0) {
       l_3.write(LOW);
-    } else if(Channel[currentCh][ledStp] == 1) {
+    } else if(Channel[currentCh-1][ledStp] == 1) {
         l_3.write(HIGH);
         }
       } else if (ledStp == 3) {
-    if (Channel[currentCh][ledStp] == 0) {
+    if (Channel[currentCh-1][ledStp] == 0) {
       l_4.write(LOW);
-    } else if(Channel[currentCh][ledStp] == 1) {
+    } else if(Channel[currentCh-1][ledStp] == 1) {
         l_4.write(HIGH);
         }
       } else if (ledStp == 4) {
-    if (Channel[currentCh][ledStp] == 0) {
+    if (Channel[currentCh-1][ledStp] == 0) {
       l_5.write(LOW);
-    } else if(Channel[currentCh][ledStp] == 1) {
+    } else if(Channel[currentCh-1][ledStp] == 1) {
         l_5.write(HIGH);
         }
       } else if (ledStp == 5) {
-    if (Channel[currentCh][ledStp] == 0) {
+    if (Channel[currentCh-1][ledStp] == 0) {
       l_6.write(LOW);
-    } else if(Channel[currentCh][ledStp] == 1) {
+    } else if(Channel[currentCh-1][ledStp] == 1) {
         l_6.write(HIGH);
         }
       } else if (ledStp == 6) {
-    if (Channel[currentCh][ledStp] == 0) {
+    if (Channel[currentCh-1][ledStp] == 0) {
       l_7.write(LOW);
-    } else if(Channel[currentCh][ledStp] == 1) {
+    } else if(Channel[currentCh-1][ledStp] == 1) {
         l_7.write(HIGH);
         }
       } else if (ledStp == 7) {
-    if (Channel[currentCh][ledStp] == 0) {
+    if (Channel[currentCh-1][ledStp] == 0) {
       l_8.write(LOW);
-    } else if(Channel[currentCh][ledStp] == 1) {
+    } else if(Channel[currentCh-1][ledStp] == 1) {
         l_8.write(HIGH);
         }
   }
@@ -207,12 +207,15 @@ void readButtons() {
             currentCh = 2;
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[1]);
+            clearLeds();
+            setLeds();
             display.print("*");
             break;
           case 2:
             currentCh = 3;
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[2]);
+            clearLeds();
             display.print("*");
             
             break;
@@ -220,34 +223,39 @@ void readButtons() {
             currentCh = 4;
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[3]);
+            clearLeds();
+            setLeds();
             display.print("*");
-            
             break;
           case 4:
             currentCh = 5;
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[4]);
+            clearLeds();
+            setLeds();
             display.print("*");
-            
             break;
           case 5:
             currentCh = 6;
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[5]);
+            clearLeds();
+            setLeds();
             display.print("*");
-            
             break;
           case 6:
             currentCh = 1;
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[0]);
+            clearLeds();
+            setLeds();
             display.print("*");
-            
             break;
           default:
             //something random changed mode to an invalid value? Get it back on track.
             currentCh = 1;
-            
+            clearLeds();
+            setLeds();
             break;
         }
       }
@@ -305,12 +313,10 @@ void updateSteps(){
 
 void trigMap(int c) {
   if(b_1 == HIGH && l_1 == LOW) {
-   // l_1 = HIGH;
-   digitalWrite(2,HIGH);
+   l_1 = HIGH;
    Channel[c][0] = 1; 
   } else if(b_1 == HIGH && l_1 == HIGH) {
-    //l_1 = LOW;
-    digitalWrite(2,HIGH);
+    l_1 = LOW;
     Channel[c][0] = 0; 
   }
   if(b_2 == HIGH && l_2 == LOW) {
@@ -362,4 +368,45 @@ void trigMap(int c) {
     l_8 = LOW;
     Channel[c][7] = 0; 
   }
+}
+
+void clearLeds(){
+  l_1.write(LOW);
+  l_2.write(LOW);
+  l_3.write(LOW);
+  l_4.write(LOW);
+  l_5.write(LOW);
+  l_6.write(LOW);
+  l_7.write(LOW);
+  l_8.write(LOW);
+}
+
+
+void setLeds(){
+  for (byte i = 0; i < 8; i++){
+    if(Channel[currentCh-1][i] == 1){
+      l_1 == HIGH;
+      }
+    if(Channel[currentCh-1][i] == 1){
+      l_2 == HIGH;
+      }
+    if(Channel[currentCh-1][i] == 1){
+      l_3 == HIGH;
+      }
+    if(Channel[currentCh-1][i] == 1){
+      l_4 == HIGH;
+      }
+    if(Channel[currentCh-1][i] == 1){
+      l_5 == HIGH;
+      }
+    if(Channel[currentCh-1][i] == 1){
+      l_6 == HIGH;
+      }
+    if(Channel[currentCh-1][i] == 1){
+      l_7 == HIGH;
+      }
+    if(Channel[currentCh-1][i] == 1){
+      l_8 == HIGH;
+      }
+    }
 }
