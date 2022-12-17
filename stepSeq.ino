@@ -34,11 +34,12 @@ void timerStuff() {
   // Called by interrupt handler once every 100 us
   // When we pass ontime ticks, call cycle_off
   // When we pass period ticks, call cycle_on
-  
+ 
   if (running) {
       tickcount += 100; 
       if (clock_state and tickcount - cycle_start_time >= ontime) // should be rollover safe
   {
+    endTrig();
     step_end();
     clock_state = false;
   }
@@ -52,7 +53,6 @@ void timerStuff() {
 }
 
 void step_end() {
-  sendTrig(ledStp);
   // Turn off LEDs and increment counters
   if (ledStp == 0) {
     if (Channel[currentCh-1][ledStp] == 0) {
@@ -120,6 +120,7 @@ void step_end() {
 }
 
 void step_start() {
+  sendTrig(ledStp);
   if (ledStp == 0) {
     if (Channel[currentCh-1][ledStp] == 0) {
       l_1.write(HIGH);
@@ -178,7 +179,6 @@ void step_start() {
     }
   }
   display.fillRect(121,1,4,4,SSD1306_BLACK);
-  endTrig();
 }
 
 void start_it() {
@@ -313,7 +313,8 @@ void updateSteps(){
         display.print(Channel[i][s]);
       }
     }
-  display.setCursor(30,0);  
+  display.setCursor(30,0);
+  display.fillRect(30,0,50,8,SSD1306_BLACK);
   display.print(BPM);
   trigMap(currentCh -1);
   display.display();
@@ -416,6 +417,12 @@ void endTrig(){
   }
 }
 
+void bpmSet(){
+  float tempoUpdate = analogRead(tempo); 
+  BPM = map(tempoUpdate, 0, 1023, min_BPM, max_BPM);
+  Serial.println(BPM);
+}
+
 void setup() {
   Serial.begin(9600);
 
@@ -447,7 +454,8 @@ void loop() {
       ontime = period * duty_cycle * 0.01;
       start_it();
       started = true; 
-    }   
+    }  
+  bpmSet(); 
   updateSteps();  
   readButtons(); 
   period = (60000000./BPM/PPB);  // period in usec
