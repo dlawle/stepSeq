@@ -7,6 +7,14 @@ int ledStp = 0;
 int currentCh = 0;
 int step = 0; 
 
+// Array info
+int Channel[6][8] = {{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0}};
+// for quick timer testing
+//int Channel[6][8] = {{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1}};
+
+//Channel positioning for rows
+int channelYpos[6] = {10,19,28,37,46,55};
+
 // setup DirectIO outputs
 //LEDs
 Output<2> l_1;
@@ -28,11 +36,8 @@ Input<33> b_6;
 Input<35> b_7;
 Input<37> b_8;
 
-//char btnArr[8] = {b_1,b_2,b_3,b_4,b_5,b_6,b_7,b_8};
-//char ledArr[8]={l_1,l_2,l_3,l_4,l_5,l_6,l_7,l_8};
+// button for changing the channels
 const int chBtn = 53;
-
-//const int step_1test = 23;   // this was done for testing a single button
 
 // Tempo and duty cycle parameters
 bool running;  // clock is running?

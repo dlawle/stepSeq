@@ -10,7 +10,6 @@
 #include <TimerOne.h>
 #include <DirectIO.h>
 #include <assert.h>
-#include "channels.h" 
 #include "ints.h"
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -24,47 +23,11 @@
 #define OLED_RESET 8
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT,
   OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
-  
-void setup() {
-  Serial.begin(9600);
-
-  //Set Up Oled
-   display.begin(SSD1306_SWITCHCAPVCC);
-   display.clearDisplay();  
-  setDisplay();
-  // Timer interrupt
-  running = true;
-  Timer1.initialize(100); // interrupt every 1 ms
-  Timer1.attachInterrupt(timerStuff);
-
-  // set LED step array to the first step
-  ledStp = 0;
  
-  pinMode(chBtn, INPUT);
-  
-  // setup channel outputs
-  for (byte i = 0; i < 6; i++) {
-    pinMode(outArr[i], OUTPUT);
-  }
-}
 
 void oledSetup(){
   display.begin(SSD1306_SWITCHCAPVCC);
   display.clearDisplay();
-}
-
-void loop() {
-  static bool started = false;
-  if (!started)
-    {
-      period = (60000000./BPM/PPB);  // period in usec
-      ontime = period * duty_cycle * 0.01;
-      start_it();
-      started = true; 
-    }   
-  updateSteps();  
-  readButtons(); 
-
 }
 
 void timerStuff() {
@@ -89,82 +52,133 @@ void timerStuff() {
 }
 
 void step_end() {
+  sendTrig(ledStp);
   // Turn off LEDs and increment counters
   if (ledStp == 0) {
     if (Channel[currentCh-1][ledStp] == 0) {
       l_1.write(LOW);
     } else if(Channel[currentCh-1][ledStp] == 1) {
         l_1.write(HIGH);
+        
         }
     } else if (ledStp == 1) {
     if (Channel[currentCh-1][ledStp] == 0) {
       l_2.write(LOW);
     } else if(Channel[currentCh-1][ledStp] == 1) {
         l_2.write(HIGH);
+        
         }
       } else if (ledStp == 2) {
     if (Channel[currentCh-1][ledStp] == 0) {
       l_3.write(LOW);
     } else if(Channel[currentCh-1][ledStp] == 1) {
         l_3.write(HIGH);
+        
         }
       } else if (ledStp == 3) {
     if (Channel[currentCh-1][ledStp] == 0) {
       l_4.write(LOW);
     } else if(Channel[currentCh-1][ledStp] == 1) {
         l_4.write(HIGH);
+        
         }
       } else if (ledStp == 4) {
     if (Channel[currentCh-1][ledStp] == 0) {
       l_5.write(LOW);
     } else if(Channel[currentCh-1][ledStp] == 1) {
         l_5.write(HIGH);
+        
         }
       } else if (ledStp == 5) {
     if (Channel[currentCh-1][ledStp] == 0) {
       l_6.write(LOW);
     } else if(Channel[currentCh-1][ledStp] == 1) {
         l_6.write(HIGH);
+        
         }
       } else if (ledStp == 6) {
     if (Channel[currentCh-1][ledStp] == 0) {
       l_7.write(LOW);
     } else if(Channel[currentCh-1][ledStp] == 1) {
         l_7.write(HIGH);
+        
         }
       } else if (ledStp == 7) {
     if (Channel[currentCh-1][ledStp] == 0) {
       l_8.write(LOW);
     } else if(Channel[currentCh-1][ledStp] == 1) {
         l_8.write(HIGH);
-        }
+        
+    }
   }
     ledStp++;
     if (ledStp == 8){
       ledStp=0;
     }
     display.fillRect(120,0,6,6,SSD1306_WHITE);  
+
 }
 
 void step_start() {
-    if (ledStp == 0) {
-        l_1.write(HIGH);
-      } else if (ledStp == 1) {
-        l_2.write(HIGH);
+  if (ledStp == 0) {
+    if (Channel[currentCh-1][ledStp] == 0) {
+      l_1.write(HIGH);
+    } else if(Channel[currentCh-1][ledStp] == 1) {
+        l_1.write(LOW);
+        
+        }
+    } else if (ledStp == 1) {
+    if (Channel[currentCh-1][ledStp] == 0) {
+      l_2.write(HIGH);
+    } else if(Channel[currentCh-1][ledStp] == 1) {
+        l_2.write(LOW);
+        
+        }
       } else if (ledStp == 2) {
-        l_3.write(HIGH);
+    if (Channel[currentCh-1][ledStp] == 0) {
+      l_3.write(HIGH);
+    } else if(Channel[currentCh-1][ledStp] == 1) {
+        l_3.write(LOW);
+        
+        }
       } else if (ledStp == 3) {
-        l_4.write(HIGH);
+    if (Channel[currentCh-1][ledStp] == 0) {
+      l_4.write(HIGH);
+    } else if(Channel[currentCh-1][ledStp] == 1) {
+        l_4.write(LOW);
+        
+        }
       } else if (ledStp == 4) {
-        l_5.write(HIGH);
+    if (Channel[currentCh-1][ledStp] == 0) {
+      l_5.write(HIGH);
+    } else if(Channel[currentCh-1][ledStp] == 1) {
+        l_5.write(LOW);
+        
+        }
       } else if (ledStp == 5) {
-        l_6.write(HIGH);
+    if (Channel[currentCh-1][ledStp] == 0) {
+      l_6.write(HIGH);
+    } else if(Channel[currentCh-1][ledStp] == 1) {
+        l_6.write(LOW);
+        
+        }
       } else if (ledStp == 6) {
-        l_7.write(HIGH);
+    if (Channel[currentCh-1][ledStp] == 0) {
+      l_7.write(HIGH);
+    } else if(Channel[currentCh-1][ledStp] == 1) {
+        l_7.write(LOW);
+        
+        }
       } else if (ledStp == 7) {
-        l_8.write(HIGH);
+    if (Channel[currentCh-1][ledStp] == 0) {
+      l_8.write(HIGH);
+    } else if(Channel[currentCh-1][ledStp] == 1) {
+        l_8.write(LOW);
+        
+    }
   }
   display.fillRect(121,1,4,4,SSD1306_BLACK);
+  endTrig();
 }
 
 void start_it() {
@@ -208,7 +222,6 @@ void readButtons() {
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[1]);
             clearLeds();
-            setLeds();
             display.print("*");
             break;
           case 2:
@@ -224,7 +237,6 @@ void readButtons() {
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[3]);
             clearLeds();
-            setLeds();
             display.print("*");
             break;
           case 4:
@@ -232,7 +244,6 @@ void readButtons() {
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[4]);
             clearLeds();
-            setLeds();
             display.print("*");
             break;
           case 5:
@@ -240,7 +251,6 @@ void readButtons() {
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[5]);
             clearLeds();
-            setLeds();
             display.print("*");
             break;
           case 6:
@@ -248,14 +258,12 @@ void readButtons() {
             display.fillRect(0,channelYpos[0],6,SCREEN_HEIGHT,SSD1306_BLACK);
             display.setCursor(0,channelYpos[0]);
             clearLeds();
-            setLeds();
             display.print("*");
             break;
           default:
             //something random changed mode to an invalid value? Get it back on track.
             currentCh = 1;
             clearLeds();
-            setLeds();
             break;
         }
       }
@@ -381,32 +389,67 @@ void clearLeds(){
   l_8.write(LOW);
 }
 
-
-void setLeds(){
-  for (byte i = 0; i < 8; i++){
-    if(Channel[currentCh-1][i] == 1){
-      l_1 == HIGH;
-      }
-    if(Channel[currentCh-1][i] == 1){
-      l_2 == HIGH;
-      }
-    if(Channel[currentCh-1][i] == 1){
-      l_3 == HIGH;
-      }
-    if(Channel[currentCh-1][i] == 1){
-      l_4 == HIGH;
-      }
-    if(Channel[currentCh-1][i] == 1){
-      l_5 == HIGH;
-      }
-    if(Channel[currentCh-1][i] == 1){
-      l_6 == HIGH;
-      }
-    if(Channel[currentCh-1][i] == 1){
-      l_7 == HIGH;
-      }
-    if(Channel[currentCh-1][i] == 1){
-      l_8 == HIGH;
-      }
+void sendTrig(int s){
+    if(Channel[0][s] == 1){
+      digitalWrite(outArr[0], HIGH);
     }
+    if(Channel[1][s] == 1){
+      digitalWrite(outArr[1], HIGH);
+    }
+    if(Channel[2][s] == 1){
+      digitalWrite(outArr[2], HIGH);
+    }
+    if(Channel[3][s] == 1){
+      digitalWrite(outArr[3], HIGH);
+    }
+    if(Channel[4][s] == 1){
+      digitalWrite(outArr[4], HIGH);
+    }
+    if(Channel[5][s] == 1){
+      digitalWrite(outArr[5], HIGH);
+    }
+}
+
+void endTrig(){
+  for(byte o = 0; o < 8; o++){
+    digitalWrite(outArr[o], LOW);     
+  }
+}
+
+void setup() {
+  Serial.begin(9600);
+
+  //Set Up Oled
+   display.begin(SSD1306_SWITCHCAPVCC);
+   display.clearDisplay();  
+  setDisplay();
+  // Timer interrupt
+  running = true;
+  Timer1.initialize(100); // interrupt every 1 ms
+  Timer1.attachInterrupt(timerStuff);
+
+  // set LED step array to the first step
+  ledStp = 0;
+ 
+  pinMode(chBtn, INPUT);
+  
+  // setup channel outputs
+  for (byte i = 0; i < 6; i++) {
+    pinMode(outArr[i], OUTPUT);
+  }
+}
+
+void loop() {
+  static bool started = false;
+  if (!started)
+    {
+      period = (60000000./BPM/PPB);  // period in usec
+      ontime = period * duty_cycle * 0.01;
+      start_it();
+      started = true; 
+    }   
+  updateSteps();  
+  readButtons(); 
+  period = (60000000./BPM/PPB);  // period in usec
+  ontime = period * duty_cycle * 0.01;
 }
