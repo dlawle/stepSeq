@@ -27,18 +27,8 @@ Output<7> l_6;
 Output<14> l_7;
 Output<15> l_8;
 
-//Buttons
-Input<23> b_1;
-Input<25> b_2;
-Input<27> b_3;
-Input<29> b_4;
-Input<31> b_5;
-Input<33> b_6;
-Input<35> b_7;
-Input<37> b_8;
-
 // button for changing the channels
-const int chBtn = 53;
+const int chBtn = 20;
 
 // Tempo and duty cycle parameters
 bool running;  // clock is running?

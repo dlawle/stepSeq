@@ -215,7 +215,7 @@ void readButtons() {
 
       //Only change mode if the new button state is LOW (pressed)
       //depending on which mode we are in, we may jump to a different one
-      if (buttonState == HIGH) {
+      if (buttonState == LOW) {
         switch (currentCh) {
           case 1:
             currentCh = 2;
@@ -322,61 +322,70 @@ void updateSteps(){
 }
 
 void trigMap(int c) {
-  if(b_1 == HIGH && l_1 == LOW) {
-   l_1 = HIGH;
-   Channel[c][0] = 1; 
-  } else if(b_1 == HIGH && l_1 == HIGH) {
-    l_1 = LOW;
-    Channel[c][0] = 0; 
+  int b_1 = digitalRead(23);
+  int b_2 = digitalRead(25);
+  int b_3 = digitalRead(27);
+  int b_4 = digitalRead(29);
+  int b_5 = digitalRead(31);
+  int b_6 = digitalRead(33);
+  int b_7 = digitalRead(35);
+  int b_8 = digitalRead(37);
+  
+if(b_1 == LOW && l_1 == LOW) {
+   l_1 = HIGH; 
+   Channel[c][0] = 1;
+  } else if(b_1 == LOW && l_1 == HIGH) {
+    l_1 = LOW; 
+    Channel[c][0] = 0;
+ }
+  if(b_2 == LOW && l_2 == LOW) {
+   l_2 = HIGH; 
+   Channel[c][1] = 1;
+  } else if(b_2 == LOW && l_2 == HIGH) {
+    l_2 = LOW; 
+    Channel[c][1] = 0;
   }
-  if(b_2 == HIGH && l_2 == LOW) {
-   l_2 = HIGH;
-   Channel[c][1] = 1; 
-  } else if(b_2 == HIGH && l_2 == HIGH) {
-    l_2 = LOW;
-    Channel[c][1] = 0; 
+  if(b_3 == LOW && l_3 == LOW) {
+   l_3 = HIGH; 
+    Channel[c][2] = 1;
+  } else if(b_3 == LOW && l_3 == HIGH) {
+    l_3 = LOW; 
+    Channel[c][2] = 0;
   }
-  if(b_3 == HIGH && l_3 == LOW) {
-   l_3 = HIGH;
-   Channel[c][2] = 1; 
-  } else if(b_3 == HIGH && l_3 == HIGH) {
-    l_3 = LOW;
-    Channel[c][2] = 0; 
+  if(b_4 == LOW && l_4 == LOW) {
+   l_4 = HIGH; 
+    Channel[c][3] = 1;
+  } else if(b_4 == LOW && l_4 == HIGH) {
+    l_4 = LOW; 
+    Channel[c][3] = 0;
   }
-  if(b_4 == HIGH && l_4 == LOW) {
-   l_4 = HIGH;
-   Channel[c][3] = 1; 
-  } else if(b_4 == HIGH && l_4 == HIGH) {
-    l_4 = LOW;
-    Channel[c][3] = 0; 
+  if(b_5 == LOW && l_5 == LOW) {
+   l_5 = HIGH; 
+    Channel[c][4] = 1;
+  } else if(b_5== LOW && l_5 == HIGH) {
+    l_5 = LOW; 
+    Channel[c][4] = 0;
   }
-  if(b_5 == HIGH && l_5 == LOW) {
-   l_5 = HIGH;
-   Channel[c][4] = 1; 
-  } else if(b_5== HIGH && l_5 == HIGH) {
-    l_5 = LOW;
-    Channel[c][4] = 0; 
+  if(b_6 == LOW && l_6 == LOW) {
+   l_6 = HIGH; 
+    Channel[c][5] = 1;
+  } else if(b_6 == LOW && l_6 == HIGH) {
+    l_6 = LOW; 
+    Channel[c][5] = 0;
   }
-  if(b_6 == HIGH && l_6 == LOW) {
-   l_6 = HIGH;
-   Channel[c][5] = 1; 
-  } else if(b_6 == HIGH && l_6 == HIGH) {
-    l_6 = LOW;
-    Channel[c][5] = 0; 
+  if(b_7 == LOW && l_7 == LOW) {
+   l_1 = HIGH; 
+    Channel[c][6] = 1;
+  } else if(b_7 == LOW && l_7 == HIGH) {
+    l_7 = LOW; 
+    Channel[c][6] = 0;
   }
-  if(b_7 == HIGH && l_7 == LOW) {
-   l_1 = HIGH;
-   Channel[c][6] = 1; 
-  } else if(b_7 == HIGH && l_7 == HIGH) {
-    l_7 = LOW;
-    Channel[c][6] = 0; 
-  }
-  if(b_8 == HIGH && l_8 == LOW) {
-   l_8 = HIGH;
-   Channel[c][7] = 1; 
-  } else if(b_8 == HIGH && l_8 == HIGH) {
-    l_8 = LOW;
-    Channel[c][7] = 0; 
+  if(b_8 == LOW && l_8 == LOW) {
+   l_8 = HIGH; 
+    Channel[c][7] = 1;
+  } else if(b_8 == LOW && l_8 == HIGH) {
+    l_8 = LOW; 
+    Channel[c][7] = 0;
   }
 }
 
@@ -475,13 +484,22 @@ void setup() {
 
   // set LED step array to the first step
   ledStp = 0;
- 
-  pinMode(chBtn, INPUT);
   
   // setup channel outputs
   for (byte i = 0; i < 6; i++) {
     pinMode(outArr[i], OUTPUT);
   }
+
+  // setup internal pullup buttons:
+  pinMode(23,INPUT_PULLUP);
+  pinMode(25,INPUT_PULLUP);
+  pinMode(27,INPUT_PULLUP);
+  pinMode(29,INPUT_PULLUP);
+  pinMode(31,INPUT_PULLUP);
+  pinMode(33,INPUT_PULLUP);
+  pinMode(35,INPUT_PULLUP);
+  pinMode(37,INPUT_PULLUP);
+  pinMode(chBtn, INPUT_PULLUP);
 }
 
 void loop() {
