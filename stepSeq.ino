@@ -115,12 +115,12 @@ void step_end() {
     if (ledStp == 8){
       ledStp=0;
     }
+    sendClk(ledStp);
     display.fillRect(120,0,6,6,SSD1306_WHITE);  
 
 }
 
 void step_start() {
-  sendTrig(ledStp);
   if (ledStp == 0) {
     if (Channel[currentCh-1][ledStp] == 0) {
       l_1.write(HIGH);
@@ -178,6 +178,8 @@ void step_start() {
         
     }
   }
+  sendTrig(ledStp);
+  endClk(ledStp);
   display.fillRect(121,1,4,4,SSD1306_BLACK);
 }
 
@@ -421,6 +423,60 @@ void sendTrig(int s){
     }
 }
 
+void sendClk(int s){
+    if (s == 0) {
+      digitalWrite(clkOut[0], HIGH);  // 1:1
+      digitalWrite(clkOut[1], HIGH);  // 1:2
+      digitalWrite(clkOut[2], HIGH);  // 1:4
+      digitalWrite(clkOut[3], HIGH);  // 1:8
+    } else if (s == 1) {
+      digitalWrite(clkOut[0], HIGH);
+    } else if (s == 2) {
+      digitalWrite(clkOut[0], HIGH);
+      digitalWrite(clkOut[1], HIGH);
+    } else if (s == 3) {
+      digitalWrite(clkOut[0], HIGH);
+    } else if (s == 4) {
+      digitalWrite(clkOut[0], HIGH);
+      digitalWrite(clkOut[1], HIGH);
+      digitalWrite(clkOut[2], HIGH);
+    } else if (s == 5) {
+      digitalWrite(clkOut[0], HIGH);
+    } else if (s == 6) {
+      digitalWrite(clkOut[0], HIGH);
+      digitalWrite(clkOut[1], HIGH);
+    } else if (s == 7) {
+      digitalWrite(clkOut[0], HIGH);
+    }
+}
+
+void endClk(int s){
+    if (s == 0) {
+      digitalWrite(clkOut[0], LOW);  // 1:1
+      digitalWrite(clkOut[1], LOW);  // 1:2
+      digitalWrite(clkOut[2], LOW);  // 1:4
+      digitalWrite(clkOut[3], LOW);  // 1:8
+    } else if (s == 1) {
+      digitalWrite(clkOut[0], LOW);
+    } else if (s == 2) {
+      digitalWrite(clkOut[0], LOW);
+      digitalWrite(clkOut[1], LOW);
+    } else if (s == 3) {
+      digitalWrite(clkOut[0], LOW);
+    } else if (s == 4) {
+      digitalWrite(clkOut[0], LOW);
+      digitalWrite(clkOut[1], LOW);
+      digitalWrite(clkOut[2], LOW);
+    } else if (s == 5) {
+      digitalWrite(clkOut[0], LOW);
+    } else if (s == 6) {
+      digitalWrite(clkOut[0], LOW);
+      digitalWrite(clkOut[1], LOW);
+    } else if (s == 7) {
+      digitalWrite(clkOut[0], LOW);
+    }
+}
+
 void endTrig(){
   for(byte o = 0; o < 8; o++){
     digitalWrite(outArr[o], LOW);     
@@ -489,6 +545,11 @@ void setup() {
   for (byte i = 0; i < 6; i++) {
     pinMode(outArr[i], OUTPUT);
   }
+
+  // setup clock outputs 
+  for (byte i = 0; i < 4; i++) {
+    pinMode(clkOut[i], OUTPUT);
+  }  
 
   // setup internal pullup buttons:
   pinMode(23,INPUT_PULLUP);

@@ -1,6 +1,9 @@
 // storage of integers and the likes
 
-const int outArr[6]={41,43,45,47,49,51};
+
+const int clkOut[4]={66,67,68,69}; // nice
+
+const int outArr[6]={41,51,49,47,45,43};
 int ledArr[8]={2,3,4,5,6,7,14,15};
 const int btnArr[8]={23,25,27,29,31,33,35,37};
 int ledStp = 0;
